@@ -16,17 +16,12 @@
       </tr>
       <tr>
       <td>
-          <asp:DropDownList ID="DropDownList1" runat="server" 
-              DataSourceID="SqlDataSource1" DataTextField="Product" 
+          <asp:DropDownList ID="DropDownList1" runat="server" DataTextField="Product" 
               DataValueField="ProductId" 
               onselectedindexchanged="DropDownList1_SelectedIndexChanged" 
               AutoPostBack="True">
              
           </asp:DropDownList>
-          <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-              ConnectionString="<%$ ConnectionStrings:projectmgtConnectionString %>" 
-              SelectCommand="SELECT [Product], [ProductId] FROM [mstProduct]">
-          </asp:SqlDataSource>
       </td>
       <td><asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
       <asp:RegularExpressionValidator ID="RegularExpressionValidator1"

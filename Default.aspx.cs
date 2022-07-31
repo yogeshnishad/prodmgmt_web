@@ -13,12 +13,16 @@ using System.Diagnostics;
 
 public partial class _Default : System.Web.UI.Page 
 {
-    const string connectionString = @"Data Source=.\SQLEXPRESS;AttachDbFilename=C:\Users\usert\Documents\projectmgt.mdf;Integrated Security=True;Connect Timeout=30;User Instance=True";
+    string connectionString = @"Data Source=.\SQLEXPRESS;AttachDbFilename="+HttpRuntime.AppDomainAppPath+"projectmgt.mdf;Integrated Security=True;Connect Timeout=30;User Instance=True";
     int selectedIndex = 0;
     int selectedId = 1;
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if(DropDownList1.Items.Count<=0){
+            this.loadCombobox();
+        }
+        
         this.refreshDataset();
     }
     protected void Button1_Click(object sender, EventArgs e)
@@ -63,6 +67,35 @@ public partial class _Default : System.Web.UI.Page
             adapter.Fill(ds);
             GridView1.DataSource = ds.Tables[0];
             GridView1.DataBind();
+        }
+        catch (Exception ex)
+        {
+        }
+        finally
+        {
+            con.Close();
+        }
+    }
+
+    private void loadCombobox(){
+        SqlConnection con = new SqlConnection(connectionString);
+        SqlDataAdapter adapter;
+        DataSet ds = new DataSet();
+        try
+        {
+            //create query string(SELECT QUERY)
+            String query = "SELECT productId, product, availableQuantity, basePrice, availableQuantity*basePrice as total FROM mstProduct";
+            con.Open();
+            //Adapter bind to query and connection object
+            adapter = new SqlDataAdapter(query, con);
+            //fill the dataset
+            adapter.Fill(ds);
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                string id = ds.Tables[0].Rows[i].ItemArray[0].ToString();
+                string productName = ds.Tables[0].Rows[i].ItemArray[1].ToString();
+                DropDownList1.Items.Add(new ListItem(productName, id));
+            }
         }
         catch (Exception ex)
         {
